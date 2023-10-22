@@ -18,7 +18,7 @@ namespace MyStockmarketBackend.WorldInfo
         public int Employees { get; set; }
         public DateTime IPO {  get; set; } = DateTime.Now;
         public Stock Stock { get; set; }
-        public bool IsPrivateEquity { get; set; }
+        public bool IsPrivateEquity { get; set; } = false;
 
         /// <summary>
         /// Initialize a publicly traded company.

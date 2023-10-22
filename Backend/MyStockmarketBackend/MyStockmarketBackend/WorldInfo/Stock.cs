@@ -12,9 +12,9 @@ namespace MyStockmarketBackend.WorldInfo
         public string Name { get; set; }
         public string Ticker { get; set; }
         public string Description { get; set; }
-        public Company Company { get; set; }
-        public PriceSeries PriceHistory { get; set; }
-        public Keyvalues HistoricKeyvalues { get; set;}
+        public PriceSeries PriceInfo { get; set; }
+        public List<Keyvalues> HistoricKeyvalues { get; set; } = new List<Keyvalues>();
+        public Keyvalues? LatestKeyvalues { get => HistoricKeyvalues.MaxBy(x => x.Year); }
 
         /// <summary>
         /// TODO: implement if memory becomes an issue.

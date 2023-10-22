@@ -14,15 +14,6 @@ namespace MyStockmarketBackend.Data
         {
             throw new NotImplementedException();
         }
-
-        public Stock LoadStock(string ticker)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Stock LoadStock(Stock stock)
-        {
-            throw new NotImplementedException();
         }
     }
 }
