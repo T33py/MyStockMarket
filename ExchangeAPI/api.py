@@ -42,7 +42,7 @@ def create_order(order: OrderCreate):
 # Create a route to add funds to a user's account
 @app.post("/customers/change_funds/")
 def change_funds(add_funds_data: AddFunds):
-    if market_data.change_account_balance(add_funds_data.customer_id, add_funds_data.amount):
+    if market_data.change_account_balance(id=add_funds_data.customer_id, change=add_funds_data.amount):
         return { "message": "Funds deposited" }
     else:
         raise HTTPException(409, 'UserID not found')

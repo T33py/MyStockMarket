@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Create a SQLAlchemy database engine
-DATABASE_URL = "sqlite:///stockbroker.db"
+DATABASE_URL = "sqlite:///exchange.db"
 engine = create_engine(DATABASE_URL)
 
 # Create a Session class to interact with the database
