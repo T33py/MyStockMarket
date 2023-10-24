@@ -19,6 +19,27 @@ class Customer(Base):
     name = Column(String, index=True)
     account_balance = Column(Float)
 
+# Define the SQLAlchemy model for positions
+class Position(Base):
+    __tablename__ = 'positions'
+
+    id = Column(Integer, primary_key=True, index=True)
+    customer_id = Column(Integer, index=True)
+    stock_symbol = Column(String, index=True)
+    number_of_shares = Column(Integer)
+    bought_at_price = Column(Float)
+    bought_at_date = Column(String)
+
+class Stock(Base):
+    __tablename__ = 'Stocks'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    stock_symbol = Column(String, index=True)
+    company = Column(String, index=True)
+    company_description = Column(String)
+    price = Column(Float, index=True)
+
+
 # Define the SQLAlchemy model for buy and sell orders
 class Order(Base):
     __tablename__ = 'orders'
