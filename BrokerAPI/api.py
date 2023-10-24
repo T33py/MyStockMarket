@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from market_data import Session, Customer, Order, get_all_customers
 from typing import List
+import market_data
 
 app = FastAPI()
 
@@ -29,18 +29,10 @@ class AddFunds(BaseModel):
 #####################
 @app.post("/customers/create/")
 def create_customer(customer: CustomerCreate):
-    session = Session()
-    try:
-        # Create a new customer based on the provided data
-        new_customer = Customer(name=customer.name, account_balance=customer.account_balance)
-        session.add(new_customer)
-        session.commit()
-        session.refresh(new_customer)  # Refresh the object to get the generated ID
-
-        return new_customer
-    finally:
-        session.close()
-    pass
+    new_customer = market_data.create_new_customer(name=customer.name, account_balance=customer.account_balance)
+    if new_customer is None:
+        raise HTTPException(409, 'User already exists')
+    return new_customer
 
 @app.post("/orders/")
 def create_order(order: OrderCreate):
@@ -48,23 +40,14 @@ def create_order(order: OrderCreate):
     pass
 
 # Create a route to add funds to a user's account
-@app.post("/customers/add_funds/")
-def add_funds(add_funds_data: AddFunds):
-    session = Session()
-    try:
-        # Check if the customer with the given ID exists
-        customer = session.query(Customer).filter(Customer.id == add_funds_data.customer_id).first()
-        if customer is None:
-            raise HTTPException(status_code=404, detail="Customer not found")
-
-        # Update the customer's account balance by adding the specified amount
-        customer.account_balance += add_funds_data.amount
-        session.commit()
-        return customer
-    finally:
-        session.close()
+@app.post("/customers/change_funds/")
+def change_funds(add_funds_data: AddFunds):
+    if market_data.change_account_balance(add_funds_data.customer_id, add_funds_data.amount):
+        return { "message": "Funds deposited" }
+    else:
+        raise HTTPException(409, 'UserID not found')
 
 @app.get("/customers/")
 def get_customers():
-    customers = get_all_customers()
+    customers = market_data.get_all_customers()
     return customers
