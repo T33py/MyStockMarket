@@ -154,6 +154,11 @@ def execute_order(order: int, counterparty: int)-> Order|None:
 
         seller.number_of_shares -= order.quantity
 
+        # update the stock
+        stock = session.query(Stock).filter(Stock.stock_symbol == order.stock_symbol).first()
+        if stock is not None:
+            stock.price = order.price
+
         # update the order and commit
         order.status = orderstatuses.CLOSED
         session.commit()
@@ -204,7 +209,19 @@ def change_account_balance(id: int, change: Float)-> bool:
         # Update the customer's account balance by adding the specified amount
         customer.account_balance += change
         session.commit()
+    except:
+        return False
     finally:
         session.close()
 
     return True
+
+def create_stock(id, symbol, company, company_description, price):
+    session = Session()
+    try:
+        new_stock = Stock(id=id, stock_symbol=symbol, company=company, company_description=company_description, price=price)
+        session.add(new_stock)
+        return new_stock
+    finally:
+        session.close()
+    return None
